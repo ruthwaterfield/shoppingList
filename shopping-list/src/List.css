@@ -1,0 +1,10 @@
+.list {
+    background-color: #99bbff;
+    flex-basis: 40%;
+    margin: 2px;
+    text-align: left;
+}
+
+h2 {
+    margin: 4px;
+}
