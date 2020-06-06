@@ -48,35 +48,30 @@ const getListItem = (request, response) => {
 }
 
 const addListItem = (request, response) => {
-	var cols = [request.body.name, request.body.section, request.body.required, request.body.notes];
+	const { name, section, required, notes } = request.body
 	pool.query('INSERT INTO list_items(name, section, required, notes) VALUES($1, $2, $3, $4);',
-		cols,
-		function (error) {
+		[name, section, required, notes],
+		function (error, result) {
 			if (error) {
 				console.log(error);
 				response.status(400)
 			}
-			response.status(200)
+			response.status(201).send(`User added with ID: ${result.insertId}`)
 		}
 	)
 }
 
 const editListItem = (request, response) => {
-	var cols = [
-		request.body.name,
-		request.body.section,
-		request.body.required,
-		request.body.notes,
-		request.params.id
-	];
+	const itemId = request.params.itemId
+	const {name, section, required, notes } = request.body
 	pool.query('UPDATE list_items SET name=$1, section=$2, required=$3, notes=$4 WHERE id=$5;',
-		cols,
+		[name, section, required, notes, itemId],
 		function (error) {
 			if (error) {
 				console.log(error);
 				response.status(400)
 			}
-			response.status(200)
+			response.status(200).send(`User modified with ID: ${itemId}`)
 		}
 	)
 }
