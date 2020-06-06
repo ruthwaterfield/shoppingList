@@ -7,13 +7,28 @@
     flex-direction: column;
     position: relative;
     justify-content: space-between;
+    padding: 5px;
 }
 
 h2 {
     margin: 4px;
 }
 
-.addItemForm {
+button {
+    width: 20%;
+    align-self: center;
+}
+
+
+.ingredientForm {
+    display: flex;
+    flex-direction: row;
     margin: 4px;
     justify-self: flex-end;
+}
+
+.topRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

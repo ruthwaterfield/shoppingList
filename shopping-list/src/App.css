@@ -38,6 +38,10 @@
   align-items: stretch;
 }
 
+html {
+  background-color: #88aaff;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
