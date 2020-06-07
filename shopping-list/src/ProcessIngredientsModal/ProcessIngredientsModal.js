@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import Modal from 'react-bootstrap/Modal'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
@@ -10,12 +9,14 @@ class ProcessIngredientsModal extends Component{
         super(props)
         this.state = {
             itemsToAdd: [],
-            currentItem: 0
+            currentItem: 0,
+            currentComment: ""
         }
         
         this.saveList = this.saveList.bind(this)
         this.addItem = this.addItem.bind(this)
         this.nextItem = this.nextItem.bind(this)
+        this.changeComment = this.changeComment.bind(this)
     }
 
     saveList() { 
@@ -25,16 +26,25 @@ class ProcessIngredientsModal extends Component{
     }
 
     addItem() {
-        this.setState({itemsToAdd: this.state.itemsToAdd.concat([this.props.processList[this.state.currentItem]])})
+        this.setState(
+            {
+                itemsToAdd: this.state.itemsToAdd.concat({name: this.props.processList[this.state.currentItem], comment: this.state.currentComment}),
+                currentComment: ""
+            }
+        )
         this.nextItem()
     }
 
     nextItem() {
-        if (this.state.currentItem <= this.props.processList.length-2) {
+        if (this.state.currentItem <= this.props.processList.length-1) {
             this.setState({currentItem: this.state.currentItem + 1})
         } else {
             this.saveList()
         }
+    }
+
+    changeComment(event) {
+        this.setState({currentComment: event.target.value})
     }
 
     render() {
@@ -51,7 +61,7 @@ class ProcessIngredientsModal extends Component{
                             <Form.Label>Comment</Form.Label>
                         </Col>
                         <Col>
-                            <Form.Control type="text" placeholder=""></Form.Control>
+                            <Form.Control type="text" placeholder="Comment" value={this.state.currentComment} onChange={this.changeComment}/>
                         </Col>
                     </Form.Row>
                     <Button variant="danger" onClick={this.nextItem}>Skip</Button>

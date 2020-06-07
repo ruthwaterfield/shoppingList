@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import './List.css'
-
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-
-import ProcessIngredientsModal from './ProcessIngredientsModal'
-
 import axios from 'axios'
 
-import baseUrl from './baseurl'
+import ProcessIngredientsModal from '../ProcessIngredientsModal/ProcessIngredientsModal'
+import baseUrl from '../baseurl'
+import ListItem from '../ListItem/ListItem'
+import './List.css'
+
 
 class List extends Component {
     constructor(props) {
@@ -29,15 +28,14 @@ class List extends Component {
     }
 
     componentDidMount() {
-        axios.get(baseUrl+'/sectionPotentialItems/1').then(
-            (response) => {
+        axios.get(baseUrl+'/sectionPotentialItems/'+this.props.id).then(response => 
+            {
                 var responseItems = response.data.map(function (item) {
                     return item.name
                 })
                 this.setState({toProcessFromServer: responseItems})
             }
-        ).catch(
-            function (error) {
+        ).catch(error => {
                 console.log(error)
             }
         )
@@ -52,8 +50,8 @@ class List extends Component {
 
     addNewItemToContents(event) {
         // call api to save item
-        this.setState({contents: this.state.contents.concat(this.state.addValue)})
-        axios.post(baseUrl+'/listitem/add', {name: this.state.addValue, section: 1, required: true, notes: ""}).then(
+        this.setState({contents: this.state.contents.concat({name:this.state.addValue, comment: ""})})
+        axios.post(baseUrl+'/listitem/add', {name: this.state.addValue, section: this.props.id, required: true, notes: ""}).then(
 
             )
         event.preventDefault()
@@ -75,7 +73,7 @@ class List extends Component {
             </div>
             <ul>
                 {this.state.contents.map(item => 
-                    <li>{item}</li>
+                    <ListItem name={item.name} comment={item.comment} key={item.id}/>
                 )}
             </ul>
 
