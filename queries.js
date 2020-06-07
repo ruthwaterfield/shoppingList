@@ -17,11 +17,6 @@ const getPotentialItemsForSection = (request, response) => {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
 		} else {
-			// Website you wish to allow to connect
-			response.setHeader('Access-Control-Allow-Origin', '*');
-			// Request methods you wish to allow
-			response.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
 			response.status(200).json(results.rows)
 		}
 
@@ -36,11 +31,6 @@ const getRequiredItemsForSection = (request, response) => {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
 		} else {
-			// Website you wish to allow to connect
-			response.setHeader('Access-Control-Allow-Origin', '*');
-			// Request methods you wish to allow
-			response.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
 			response.status(200).json(results.rows)
 		}
 	})
@@ -56,11 +46,6 @@ const getListItem = (request, response) => {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				// Website you wish to allow to connect
-				response.setHeader('Access-Control-Allow-Origin', '*');
-				// Request methods you wish to allow
-				response.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
 				response.status(200).json(results.rows)
 			}
 		})
@@ -80,11 +65,6 @@ const addListItem = (request, response) => {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				// Website you wish to allow to connect
-				response.setHeader('Access-Control-Allow-Origin', '*');
-				// Request methods you wish to allow
-				response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-
 				response.status(201).json(result.rows)
 			}
 		}
@@ -106,11 +86,6 @@ const editListItem = (request, response) => {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				// Website you wish to allow to connect
-				response.setHeader('Access-Control-Allow-Origin', '*');
-				// Request methods you wish to allow
-				response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-
 				response.status(200).send(`Item modified with id: ${itemId}`)
 			}
 		}

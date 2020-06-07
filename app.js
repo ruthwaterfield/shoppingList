@@ -1,7 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 var app = express()
+app.use(cors())
+
 app.set('port', process.env.PORT || 8080)
 
 // Use the body-parser body parsing middleware
