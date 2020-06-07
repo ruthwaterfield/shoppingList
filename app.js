@@ -17,8 +17,11 @@ const db = require('./queries')
 app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
   })
+
+app.get('/sections', db.getSections)
 app.get('/sectionPotentialItems/:sectionId', db.getPotentialItemsForSection)
 app.get('/sectionRequiredItems/:sectionId', db.getRequiredItemsForSection)
+app.get('/sectionNotRequiredItems/:sectionId', db.getNotRequiredItemsForSection)
 app.get('/listItem/:itemId', db.getListItem)
 
 

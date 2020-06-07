@@ -9,6 +9,17 @@ const pool = new Pool({
 	port: dbSettings.port
 })
 
+const getSections = (request, response) => {
+	pool.query('SELECT * FROM supermarket_sections ORDER BY id ASC;', function (error, results) {
+		if (error) {
+			console.log(error);
+			response.status(400).send('Sorry there was a problem!')
+		} else {
+			response.status(200).json(results.rows)
+		}
+	})
+}
+
 const getPotentialItemsForSection = (request, response) => {
 	var sectionId = request.params.sectionId;
 
@@ -19,7 +30,6 @@ const getPotentialItemsForSection = (request, response) => {
 		} else {
 			response.status(200).json(results.rows)
 		}
-
 	})
 }
 
@@ -27,6 +37,19 @@ const getRequiredItemsForSection = (request, response) => {
 	var sectionId = request.params.sectionId;
 
 	pool.query('SELECT * FROM list_items WHERE section=$1 AND required=true ORDER BY id ASC;', [sectionId], function (error, results) {
+		if (error) {
+			console.log(error);
+			response.status(400).send('Sorry there was a problem!')
+		} else {
+			response.status(200).json(results.rows)
+		}
+	})
+}
+
+const getNotRequiredItemsForSection = (request, response) => {
+	var sectionId = request.params.sectionId;
+
+	pool.query('SELECT * FROM list_items WHERE section=$1 AND required=false ORDER BY id ASC;', [sectionId], function (error, results) {
 		if (error) {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
@@ -65,7 +88,7 @@ const addListItem = (request, response) => {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				response.status(201).json(result.rows)
+				response.status(200).json(result.rows)
 			}
 		}
 	)
@@ -79,22 +102,24 @@ const editListItem = (request, response) => {
 		required,
 		notes
 	} = request.body
-	pool.query('UPDATE list_items SET name=$1, section=$2, required=$3, notes=$4 WHERE id=$5;',
+	pool.query('UPDATE list_items SET name=$1, section=$2, required=$3, notes=$4 WHERE id=$5 returning *;',
 		[name, section, required, notes, itemId],
-		function (error) {
+		function (error, result) {
 			if (error) {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				response.status(200).send(`Item modified with id: ${itemId}`)
+				response.status(200).json(result.rows)
 			}
 		}
 	)
 }
 
 module.exports = {
+	getSections,
 	getPotentialItemsForSection,
 	getRequiredItemsForSection,
+	getNotRequiredItemsForSection,
 	getListItem,
 	addListItem,
 	editListItem
