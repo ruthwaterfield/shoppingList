@@ -1,8 +1,3 @@
-sudo -i -u shopping
-psql
-
-\dt
-
 CREATE TABLE supermarket_sections(
     id serial PRIMARY KEY,
     section VARCHAR(255) NOT NULL

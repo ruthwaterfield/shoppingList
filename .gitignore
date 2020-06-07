@@ -1,2 +1,4 @@
 node_modules/
 shopping-list/src/baseurl.js
+dbSettings.js
+

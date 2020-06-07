@@ -1,0 +1,28 @@
+{
+  "name": "shoppinglist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruthwaterfield/shoppingList.git"
+  },
+  "keywords": [],
+  "author": "Ruth and Jonathan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ruthwaterfield/shoppingList/issues"
+  },
+  "homepage": "https://github.com/ruthwaterfield/shoppingList#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "pg": "^8.2.1"
+  },
+  "devDependencies": {}
+}
