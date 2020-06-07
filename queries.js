@@ -12,7 +12,7 @@ const pool = new Pool({
 const getPotentialItemsForSection = (request, response) => {
 	var sectionId = request.params.sectionId;
 
-	pool.query('SELECT * FROM list_items WHERE section=$1;', [sectionId], function (error, results) {
+	pool.query('SELECT * FROM list_items WHERE section=$1 ORDER BY id ASC;', [sectionId], function (error, results) {
 		if (error) {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
@@ -31,7 +31,7 @@ const getPotentialItemsForSection = (request, response) => {
 const getRequiredItemsForSection = (request, response) => {
 	var sectionId = request.params.sectionId;
 
-	pool.query('SELECT * FROM list_items WHERE section=$1 AND required=true;', [sectionId], function (error, results) {
+	pool.query('SELECT * FROM list_items WHERE section=$1 AND required=true ORDER BY id ASC;', [sectionId], function (error, results) {
 		if (error) {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
@@ -73,7 +73,7 @@ const addListItem = (request, response) => {
 		required,
 		notes
 	} = request.body
-	pool.query('INSERT INTO list_items(name, section, required, notes) VALUES($1, $2, $3, $4);',
+	pool.query('INSERT INTO list_items(name, section, required, notes) VALUES($1, $2, $3, $4) returning *;',
 		[name, section, required, notes],
 		function (error, result) {
 			if (error) {
@@ -85,7 +85,7 @@ const addListItem = (request, response) => {
 				// Request methods you wish to allow
 				response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 
-				response.status(201).send(`User added with ID: ${result.insertId}`)
+				response.status(201).json(result.rows)
 			}
 		}
 	)
@@ -111,7 +111,7 @@ const editListItem = (request, response) => {
 				// Request methods you wish to allow
 				response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 
-				response.status(200).send(`User modified with ID: ${itemId}`)
+				response.status(200).send(`Item modified with id: ${itemId}`)
 			}
 		}
 	)
