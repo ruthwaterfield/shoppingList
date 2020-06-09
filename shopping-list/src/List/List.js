@@ -13,44 +13,47 @@ class List extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            contents:[],
+            requiredItems:[],
+            allSectionItems:[],
+            notRequiredItems:[],
             addValue: "",
-            showModal: false,
-            toProcessFromServer: []
+            showProcessSectionModal: false
         }
         this.addNewItemToContents = this.addNewItemToContents.bind(this)
-        this.addItemToContents = this.addItemToContents.bind(this)
+        this.requireItem = this.requireItem.bind(this)
 
         this.handleAddTextChange = this.handleAddTextChange.bind(this)
 
-        this.showModal = this.showModal.bind(this)
-        this.hideModal = this.hideModal.bind(this)
+        this.showProcessSectionModal = this.showProcessSectionModal.bind(this)
+        this.hideProcessSectionModal = this.hideProcessSectionModal.bind(this)
     }
 
     componentDidMount() {
-        axios.get(baseUrl+'/sectionPotentialItems/'+this.props.id).then(response => 
-            {
-                var responseItems = response.data.map(function (item) {
-                    return item.name
-                })
-                this.setState({toProcessFromServer: responseItems})
+        axios.get(baseUrl+'/sectionRequiredItems/'+this.props.sectionId).then(response => {
+                this.setState({requiredItems: response.data})
+        }).catch(error => {
+                console.log(error)
             }
-        ).catch(error => {
+        )
+
+        axios.get(baseUrl+'/sectionPotentialItems/'+this.props.sectionId).then(response => {
+                this.setState({allSectionItems: response.data})
+            }).catch(error => {
                 console.log(error)
             }
         )
     }
 
-    showModal() { this.setState({showModal: true}) }
-    hideModal() { this.setState({showModal: false}) }
+    showProcessSectionModal() { this.setState({showProcessSectionModal: true}) }
+    hideProcessSectionModal() { this.setState({showProcessSectionModal: false}) }
 
-    addItemToContents(items) {
-        this.setState({contents: this.state.contents.concat(items)})
+    requireItem(item) {
+        this.setState({requiredItems: this.state.requiredItems.concat(item)})
     }
 
     addNewItemToContents(event) {
         // call api to save item
-        this.setState({contents: this.state.contents.concat({name:this.state.addValue, comment: ""})})
+        this.setState({requiredItems: this.state.requiredItems.concat({name:this.state.addValue, comment: ""})})
         axios.post(baseUrl+'/listitem/add', {name: this.state.addValue, section: this.props.id, required: true, notes: ""}).then(
 
             )
@@ -66,28 +69,25 @@ class List extends Component {
         return (
         <div className="list">
             <div className="topRow">
-                <h2>{this.props.type}</h2>
-                <Button onClick={this.showModal} variant="secondary" size="sm">
+                <h2>{this.props.section}</h2>
+                <Button onClick={this.showProcessSectionModal} variant="secondary" size="sm">
                     Process List
                 </Button>
             </div>
-            <ul>
-                {this.state.contents.map(item => 
-                    <ListItem name={item.name} comment={item.comment} key={item.id}/>
+                {this.state.requiredItems.map(item => 
+                    <ListItem id={item.id} name={item.name} comment={item.comment} section={item.section} key={item.id}/>
                 )}
-            </ul>
-
             <Form onSubmit={this.addNewItemToContents} className="ingredientForm">
                 <Form.Control type="text" value={this.state.addValue} onChange={this.handleAddTextChange}/>
                 <Button type="submit">Submit</Button>
             </Form>
 
             <ProcessIngredientsModal 
-                show={this.state.showModal}
-                hideModal={this.hideModal}
-                type={this.props.type}
-                processList={this.state.toProcessFromServer}
-                addItemToCurrentList={this.addItemToContents}
+                show={this.state.showProcessSectionModal}
+                hideModal={this.hideProcessSectionModal}
+                section={this.props.section}
+                processList={this.state.allSectionItems}
+                requireItem={this.requireItem}
             />
         </div>
     )}

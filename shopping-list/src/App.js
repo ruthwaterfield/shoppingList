@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+	Component
+} from 'react';
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
@@ -9,7 +11,7 @@ import baseUrl from './baseurl'
 
 
 class App extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props)
 		this.state = {
 			sections: []
@@ -17,30 +19,29 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-        axios.get(baseUrl+'/sections').then(response => 
-            {
-                this.setState({sections: response.data})
-            }
-        ).catch(error => {
-                console.log(error)
-            }
-        )
-    }
+		axios.get(baseUrl + '/sections').then(response => {
+			this.setState({
+				sections: response.data
+			})
+		}).catch(error => {
+			console.log(error)
+		})
+	}
 
-	render () {
-		return (
-			<div className="App">
-				<header className="App-header">
-					<img src={logo} className="App-logo" alt="logo" />
-				</header>
-				<body className="List-Holder">
-					{this.state.sections.map(item => 
-						<List type={item.section} key={item.id} id={item.id}/>
+	render() {
+		return ( 
+			<div className = "App" >
+				<div className = "App-header" >
+				<img src = {logo} className = "App-logo"alt = "logo" />
+				</div> 
+				<div className = "List-Holder"> {
+					this.state.sections.map(item =>
+					<List sectionId={item.id} section={item.section} key={item.id} />
 					)}
-				</body>
+				</div>
 			</div>
-		);
+		)
 	}
 }
 
-export default App;
+export default App
