@@ -14,13 +14,16 @@ class ProcessIngredientsModal extends Component{
             needToProcess: false
         }
         
-        this.addItem = this.addItem.bind(this)
+        this.editItem = this.editItem.bind(this)
+        this.requireItem = this.requireItem.bind(this)
+        this.notRequireItem = this.notRequireItem.bind(this)
         this.nextItem = this.nextItem.bind(this)
         this.changeComment = this.changeComment.bind(this)
     }
 
     componentDidUpdate(prevProps) {
-        if ((this.props.processList !== prevProps.processList) &&
+        if (this.props.show &&
+            !prevProps.show &&
             this.props.processList.length > 0) {
             this.setState({
                 currentItemPosition: 0,
@@ -31,23 +34,30 @@ class ProcessIngredientsModal extends Component{
         }
     }
 
-    addItem() {
+    requireItem() {
+        this.editItem(true)
+    }
+
+    notRequireItem() {
+        this.editItem(false)
+    }
+
+    editItem(required) {
         axios.post(baseUrl + '/listitem/edit/' + this.state.currentItem.id, {
             name: this.state.currentItem.name,
             section: this.state.currentItem.section,
-            required: true,
+            required: required,
             notes: this.state.currentComment
         }).then(response => {
             this.setState({
                 currentComment: ""
             })
-            this.props.requireItem(response.data)
             this.nextItem()
         })
     }
 
     nextItem() {
-        if (this.state.currentItemPosition <= this.props.processList.length - 1) {
+        if (this.state.currentItemPosition < this.props.processList.length - 1) {
             this.setState({
                 currentItemPosition: this.state.currentItemPosition + 1,
                 currentItem: this.props.processList[this.state.currentItemPosition + 1]
@@ -80,8 +90,8 @@ class ProcessIngredientsModal extends Component{
                             <Form.Control type="text" placeholder="Comment" value={this.state.currentComment} onChange={this.changeComment}/>
                         </Col>
                     </Form.Row>
-                    <Button variant="danger" onClick={this.nextItem}>No, ta</Button>
-                    <Button variant="success" onClick={this.addItem}>Yes pls</Button>
+                    <Button variant="danger" onClick={this.notRequireItem}>No, ta</Button>
+                    <Button variant="success" onClick={this.requireItem}>Yes pls</Button>
                 </Form>
                 </div>
                 :<div>Nothing to process- all done!</div> }

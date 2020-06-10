@@ -8,7 +8,6 @@ import baseUrl from '../baseurl'
 import ListItem from '../ListItem/ListItem'
 import './List.css'
 
-
 class List extends Component {
     constructor(props) {
         super(props)
@@ -45,7 +44,16 @@ class List extends Component {
     }
 
     showProcessSectionModal() { this.setState({showProcessSectionModal: true}) }
-    hideProcessSectionModal() { this.setState({showProcessSectionModal: false}) }
+    hideProcessSectionModal() {
+        axios.get(baseUrl+'/sectionRequiredItems/'+this.props.sectionId).then(response => {
+            this.setState({
+                showProcessSectionModal: false,
+                requiredItems: response.data
+            })
+        }).catch(error => {
+            console.log(error)
+        })
+    }
 
     requireItem(item) {
         this.setState({requiredItems: this.state.requiredItems.concat(item)})
@@ -71,7 +79,7 @@ class List extends Component {
             <div className="topRow">
                 <h2>{this.props.section}</h2>
                 <Button onClick={this.showProcessSectionModal} variant="secondary" size="sm">
-                    Process List
+                    Process Section
                 </Button>
             </div>
                 {this.state.requiredItems.map(item => 
@@ -87,7 +95,6 @@ class List extends Component {
                 hideModal={this.hideProcessSectionModal}
                 section={this.props.section}
                 processList={this.state.allSectionItems}
-                requireItem={this.requireItem}
             />
         </div>
     )}
