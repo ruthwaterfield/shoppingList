@@ -14,26 +14,26 @@ class List extends Component {
         this.state = {
             requiredItems:[],
             allSectionItems:[],
-            notRequiredItems:[],
+            additionalItems:[],
             addValue: "",
-            showProcessSectionModal: false
+            showProcessSectionModal: false,
+            showAdditionalItemsModal: false
         }
         this.addNewItemToContents = this.addNewItemToContents.bind(this)
-        this.requireItem = this.requireItem.bind(this)
+
+        this.getRequiredItems = this.getRequiredItems.bind(this)
 
         this.handleAddTextChange = this.handleAddTextChange.bind(this)
 
         this.showProcessSectionModal = this.showProcessSectionModal.bind(this)
         this.hideProcessSectionModal = this.hideProcessSectionModal.bind(this)
+
+        this.showAdditionalItemsModal = this.showAdditionalItemsModal.bind(this)
+        this.hideAdditionalItemsModal = this.hideAdditionalItemsModal.bind(this)
     }
 
     componentDidMount() {
-        axios.get(baseUrl+'/sectionRequiredItems/'+this.props.sectionId).then(response => {
-                this.setState({requiredItems: response.data})
-        }).catch(error => {
-                console.log(error)
-            }
-        )
+        this.getRequiredItems()
 
         axios.get(baseUrl+'/sectionPotentialItems/'+this.props.sectionId).then(response => {
                 this.setState({allSectionItems: response.data})
@@ -43,11 +43,9 @@ class List extends Component {
         )
     }
 
-    showProcessSectionModal() { this.setState({showProcessSectionModal: true}) }
-    hideProcessSectionModal() {
-        axios.get(baseUrl+'/sectionRequiredItems/'+this.props.sectionId).then(response => {
+    getRequiredItems() {
+        axios.get(baseUrl + '/sectionRequiredItems/' + this.props.sectionId).then(response => {
             this.setState({
-                showProcessSectionModal: false,
                 requiredItems: response.data
             })
         }).catch(error => {
@@ -55,8 +53,33 @@ class List extends Component {
         })
     }
 
-    requireItem(item) {
-        this.setState({requiredItems: this.state.requiredItems.concat(item)})
+    showProcessSectionModal() {
+        this.setState({showProcessSectionModal: true})
+    }
+
+    hideProcessSectionModal() {
+        this.getRequiredItems()
+        this.setState({
+            showProcessSectionModal: false,
+        })
+    }
+
+    showAdditionalItemsModal() {
+        axios.get(baseUrl + '/sectionNotRequiredItems/' + this.props.sectionId).then(response => {
+            this.setState({
+                additionalItems: response.data,
+                showAdditionalItemsModal: true
+            })
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+    
+    hideAdditionalItemsModal() {
+        this.getRequiredItems()
+        this.setState({
+            showAdditionalItemsModal: false,
+        })
     }
 
     addNewItemToContents(event) {
@@ -76,15 +99,20 @@ class List extends Component {
     render() {
         return (
         <div className="list">
-            <div className="topRow">
+            <div className="spacedRow">
                 <h2>{this.props.section}</h2>
                 <Button onClick={this.showProcessSectionModal} variant="secondary" size="sm">
-                    Process Section
+                    Process entire section
                 </Button>
             </div>
                 {this.state.requiredItems.map(item => 
-                    <ListItem id={item.id} name={item.name} comment={item.comment} section={item.section} key={item.id}/>
+                    <ListItem id={item.id} name={item.name} notes={item.notes} section={item.section} key={item.id}/>
                 )}
+                <div className="spacedRow">
+                <Button onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
+                    Process items not currently on the list
+                </Button>
+                </div>
             <Form onSubmit={this.addNewItemToContents} className="ingredientForm">
                 <Form.Control type="text" value={this.state.addValue} onChange={this.handleAddTextChange}/>
                 <Button type="submit">Submit</Button>
@@ -95,6 +123,13 @@ class List extends Component {
                 hideModal={this.hideProcessSectionModal}
                 section={this.props.section}
                 processList={this.state.allSectionItems}
+            />
+
+            <ProcessIngredientsModal 
+                show={this.state.showAdditionalItemsModal}
+                hideModal={this.hideAdditionalItemsModal}
+                section={this.props.section}
+                processList={this.state.additionalItems}
             />
         </div>
     )}

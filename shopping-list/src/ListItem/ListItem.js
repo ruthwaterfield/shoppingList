@@ -7,7 +7,7 @@ class ListItem extends Component{
         return (
             <div className="item">
                 <p>•<strong>{this.props.name}</strong></p>
-                <p>{this.props.comment}</p>
+                <p>{this.props.notes}</p>
             </div>
         )
     }

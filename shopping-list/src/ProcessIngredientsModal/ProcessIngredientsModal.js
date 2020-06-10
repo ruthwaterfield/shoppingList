@@ -77,32 +77,32 @@ class ProcessIngredientsModal extends Component{
             <Modal.Header closeButton>
                 <Modal.Title>Processing {this.props.section} List</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                {this.state.needToProcess ?
-                <div>
-                <h2>Item: <strong>{this.state.currentItem.name}</strong></h2>
-                <Form className="processItemForm">
-                    <Form.Row>
-                        <Col>
-                            <Form.Label>Comment</Form.Label>
-                        </Col>
-                        <Col>
-                            <Form.Control type="text" placeholder="Comment" value={this.state.currentComment} onChange={this.changeComment}/>
-                        </Col>
-                    </Form.Row>
+            {this.state.needToProcess ?
+            <div>
+                <Modal.Body>
+                    <h2>Item: <strong>{this.state.currentItem.name}</strong></h2>
+                    <Form className="processItemForm">
+                        <Form.Row>
+                            <Col><Form.Label>Comment</Form.Label></Col>
+                            <Col><Form.Control type="text" placeholder="Comment" value={this.state.currentComment} onChange={this.changeComment}/></Col>
+                        </Form.Row>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button variant="danger" onClick={this.notRequireItem}>No, ta</Button>
                     <Button variant="success" onClick={this.requireItem}>Yes pls</Button>
-                </Form>
-                </div>
-                :<div>Nothing to process- all done!</div> }
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={this.props.hideModal}>Finished!</Button>
-            </Modal.Footer>
+                </Modal.Footer>
+            </div>
+            :<div>
+                <Modal.Body>
+                    <div>Nothing to process- all done!</div> 
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.props.hideModal}>Finished!</Button>
+                </Modal.Footer>
+            </div>}
         </Modal>)
     }
 }
-
-
 
 export default ProcessIngredientsModal
