@@ -18,7 +18,7 @@ class ProcessIngredientsModal extends Component{
         this.requireItem = this.requireItem.bind(this)
         this.notRequireItem = this.notRequireItem.bind(this)
         this.nextItem = this.nextItem.bind(this)
-        this.changeComment = this.changeComment.bind(this)
+        this.changeNotes = this.changeNotes.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -28,7 +28,7 @@ class ProcessIngredientsModal extends Component{
             this.setState({
                 currentItemPosition: 0,
                 currentItem: this.props.processList[0],
-                currentComment: "",
+                currentNotes: "",
                 needToProcess: true
             })
         }
@@ -47,10 +47,10 @@ class ProcessIngredientsModal extends Component{
             name: this.state.currentItem.name,
             section: this.state.currentItem.section,
             required: required,
-            notes: this.state.currentComment
+            notes: this.state.currentNotes
         }).then(response => {
             this.setState({
-                currentComment: ""
+                currentNotes: ""
             })
             this.nextItem()
         })
@@ -67,8 +67,8 @@ class ProcessIngredientsModal extends Component{
         }
     }
 
-    changeComment(event) {
-        this.setState({currentComment: event.target.value})
+    changeNotes(event) {
+        this.setState({currentNotes: event.target.value})
     }
 
     render() {
@@ -83,8 +83,8 @@ class ProcessIngredientsModal extends Component{
                     <h2>Item: <strong>{this.state.currentItem.name}</strong></h2>
                     <Form className="processItemForm">
                         <Form.Row>
-                            <Col><Form.Label>Comment</Form.Label></Col>
-                            <Col><Form.Control type="text" placeholder="Comment" value={this.state.currentComment} onChange={this.changeComment}/></Col>
+                            <Col><Form.Label>Notes</Form.Label></Col>
+                            <Col><Form.Control type="text" placeholder="Notes" value={this.state.currentNotes} onChange={this.changeNotes}/></Col>
                         </Form.Row>
                     </Form>
                 </Modal.Body>

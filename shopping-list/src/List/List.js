@@ -106,7 +106,11 @@ class List extends Component {
                 </Button>
             </div>
                 {this.state.requiredItems.map(item => 
-                    <ListItem id={item.id} name={item.name} notes={item.notes} section={item.section} key={item.id}/>
+                    <ListItem 
+                        item={item} 
+                        reloadSection={this.getRequiredItems}
+                        key={item.id}
+                    />
                 )}
                 <div className="spacedRow">
                 <Button onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
