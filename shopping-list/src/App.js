@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
 
-import List from './List/List.js';
+import Section from './Section';
 import './App.css';
 import baseUrl from './baseurl'
 
@@ -44,7 +44,7 @@ class App extends Component {
 				</div> 
 				<div className = "List-Holder"> {
 					this.state.sections.map(item =>
-						<List sectionId={item.id} section={item.section} key={item.id} />
+						<Section sectionId={item.id} section={item.section} key={item.id} />
 					)}
 				</div>
 			</div>

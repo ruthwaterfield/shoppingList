@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import baseUrl from '../baseurl'
 import './ListItem.css'
-import EditItemModal from '../EditItemModal/EditItemModal'
+import EditItemModal from '../EditItemModal'
 
 class ListItem extends Component{
     constructor(props) {

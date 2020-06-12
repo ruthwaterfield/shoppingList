@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import Modal from 'react-bootstrap/Modal'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { Modal, Col, Row, Form, Button } from 'react-bootstrap'
 import axios from 'axios'
 
 import baseUrl from '../baseurl'
@@ -56,14 +53,22 @@ class EditItemModal extends Component{
             </Modal.Header>
                 <Modal.Body>
                     <Form className="processItemForm">
-                    <Form.Row>
-                            <Col><Form.Label>Name</Form.Label></Col>
-                            <Col><Form.Control type="text" placeholder="Name" value={this.state.name} onChange={this.changeName}/></Col>
-                        </Form.Row>
-                        <Form.Row>
-                            <Col><Form.Label>Notes</Form.Label></Col>
-                            <Col><Form.Control type="text" placeholder="Notes" value={this.state.notes} onChange={this.changeNotes}/></Col>
-                        </Form.Row>
+                    <Form.Group as={Row} controlId="formName">
+                        <Form.Label column sm="2">
+                            Name
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control type="text" placeholder="Item name" value={this.state.name} onChange={this.changeName}/>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formName">
+                        <Form.Label column sm="2">
+                            Notes
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control type="text" placeholder="Notes" value={this.state.nanotesme} onChange={this.changeNotes}/>
+                        </Col>
+                    </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

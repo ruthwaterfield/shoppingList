@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { Form, Button } from 'react-bootstrap'
 import axios from 'axios'
 
-import ProcessIngredientsModal from '../ProcessIngredientsModal/ProcessIngredientsModal'
+import ProcessListModal from '../ProcessListModal'
 import baseUrl from '../baseurl'
-import ListItem from '../ListItem/ListItem'
+import ListItem from '../ListItem'
 import './List.css'
 
-class List extends Component {
+class Section extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -130,14 +129,14 @@ class List extends Component {
                 <Button type="submit">Submit</Button>
             </Form>
 
-            <ProcessIngredientsModal 
+            <ProcessListModal 
                 show={this.state.showProcessSectionModal}
                 hideModal={this.hideProcessSectionModal}
                 section={this.props.section}
                 processList={this.state.allSectionItems}
             />
 
-            <ProcessIngredientsModal 
+            <ProcessListModal 
                 show={this.state.showAdditionalItemsModal}
                 hideModal={this.hideAdditionalItemsModal}
                 section={this.props.section}
@@ -147,5 +146,4 @@ class List extends Component {
     )}
 }
 
-
-export default List;
+export default Section;

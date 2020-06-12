@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import Modal from 'react-bootstrap/Modal'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { Modal, Col, Form, Button }  from 'react-bootstrap'
 import axios from 'axios'
 
 import baseUrl from '../baseurl'
 
-class ProcessIngredientsModal extends Component{
+class ProcessListModal extends Component{
     constructor(props) {
         super(props)
         this.state = {
@@ -105,4 +102,4 @@ class ProcessIngredientsModal extends Component{
     }
 }
 
-export default ProcessIngredientsModal
+export default ProcessListModal
