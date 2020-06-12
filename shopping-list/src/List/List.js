@@ -115,13 +115,13 @@ class List extends Component {
                 <Button className="coolButton" onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
                     Other Items
                 </Button>
+                <Button className="coolButton" variant="dark" size="sm">
+                    New Item
+                </Button>
                 <Button className="coolButton" onClick={this.showProcessSectionModal} variant="secondary" size="sm">
                     Redo Section
                 </Button>
-                <Button className="coolButton" variant="secondary" size="sm">
-                    New Item
-                </Button>
-                <Button className="coolButton" variant="secondary" size="sm">
+                <Button className="coolButton" variant="danger" size="sm">
                     Clear Section
                 </Button>
             </div>

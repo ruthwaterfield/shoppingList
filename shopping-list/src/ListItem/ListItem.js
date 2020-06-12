@@ -44,10 +44,10 @@ class ListItem extends Component{
             <div className="item">
                 <div id="itemName"><strong>{this.props.item.name}</strong></div>
                 <div id="itemComment">{this.props.item.notes}</div>
-                <Button className="coolButton" onClick={this.showEditModal} variant="info" size="sm">
+                <Button className="coolButton" onClick={this.showEditModal} variant="outline-primary" size="sm">
                     Edit
                 </Button>
-                <Button className="coolButton" onClick={this.removeItem} variant="danger" size="sm">
+                <Button className="coolButton" onClick={this.removeItem} variant="outline-danger" size="sm">
                     Remove
                 </Button>
             </div>
