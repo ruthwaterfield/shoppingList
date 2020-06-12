@@ -29,7 +29,7 @@
 }
 
 .List-Holder {
-  background-color: #88aaff;
+  background-color: #5588ee;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -39,7 +39,7 @@
 }
 
 html {
-  background-color: #88aaff;
+  background-color: #5588ee;
 }
 
 @keyframes App-logo-spin {

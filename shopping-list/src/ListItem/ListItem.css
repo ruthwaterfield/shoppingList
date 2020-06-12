@@ -1,9 +1,21 @@
 .item {
     margin: 3px 0px;
-    padding: 1px;
+    padding: 4px;
     color: #682342;
-    background-color: #88aaff;
+    background-color: #66bbff;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+#itemName {
+    width: 20%;
+}
+
+#itemComment {
+    width: 20%;
+}
+
+.coolButton {
+    width: 20%;
 }

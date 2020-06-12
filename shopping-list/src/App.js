@@ -9,6 +9,7 @@ import List from './List/List.js';
 import './App.css';
 import baseUrl from './baseurl'
 
+import Button from 'react-bootstrap/Button'
 
 class App extends Component {
 	constructor(props) {
@@ -16,6 +17,8 @@ class App extends Component {
 		this.state = {
 			sections: []
 		}
+
+		this.doPrint = this.doPrint.bind(this)
 	}
 
 	componentDidMount() {
@@ -28,15 +31,20 @@ class App extends Component {
 		})
 	}
 
+	doPrint() {
+		window.print()
+	}
+
 	render() {
 		return ( 
 			<div className = "App" >
 				<div className = "App-header" >
-				<img src = {logo} className = "App-logo"alt = "logo" />
+					<img src = {logo} className = "App-logo"alt = "logo"/>
+					<Button onClick={this.doPrint}>Print</Button>
 				</div> 
 				<div className = "List-Holder"> {
 					this.state.sections.map(item =>
-					<List sectionId={item.id} section={item.section} key={item.id} />
+						<List sectionId={item.id} section={item.section} key={item.id} />
 					)}
 				</div>
 			</div>

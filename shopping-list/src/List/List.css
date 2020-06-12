@@ -1,5 +1,5 @@
 .list {
-    background-color: #99bbff;
+    background-color: #55aaff;
     flex-basis: 40%;
     margin: 2px;
     text-align: left;
@@ -10,13 +10,16 @@
     padding: 5px;
 }
 
+.listItemCollection {
+    flex-grow: 1;
+}
+
 h2 {
     margin: 4px;
 }
 
-button {
-    width: 30%;
-    align-self: center;
+.coolButton {
+    width: 20%;
 }
 
 
@@ -31,4 +34,5 @@ button {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 2px;
 }

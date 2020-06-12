@@ -101,10 +101,8 @@ class List extends Component {
         <div className="list">
             <div className="spacedRow">
                 <h2>{this.props.section}</h2>
-                <Button onClick={this.showProcessSectionModal} variant="secondary" size="sm">
-                    Process entire section
-                </Button>
             </div>
+            <div className="listItemCollection">
                 {this.state.requiredItems.map(item => 
                     <ListItem 
                         item={item} 
@@ -112,11 +110,21 @@ class List extends Component {
                         key={item.id}
                     />
                 )}
-                <div className="spacedRow">
-                <Button onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
-                    Process items not currently on the list
+            </div>
+            <div className="spacedRow">
+                <Button className="coolButton" onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
+                    Other Items
                 </Button>
-                </div>
+                <Button className="coolButton" onClick={this.showProcessSectionModal} variant="secondary" size="sm">
+                    Redo Section
+                </Button>
+                <Button className="coolButton" variant="secondary" size="sm">
+                    New Item
+                </Button>
+                <Button className="coolButton" variant="secondary" size="sm">
+                    Clear Section
+                </Button>
+            </div>
             <Form onSubmit={this.addNewItemToContents} className="ingredientForm">
                 <Form.Control type="text" value={this.state.addValue} onChange={this.handleAddTextChange}/>
                 <Button type="submit">Submit</Button>

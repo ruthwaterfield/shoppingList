@@ -42,13 +42,13 @@ class ListItem extends Component{
         return (
             <Fragment>
             <div className="item">
-                <div><strong>{this.props.item.name}</strong></div>
-                <div>{this.props.item.notes}</div>
-                <Button onClick={this.removeItem} variant="danger" size="s">
-                    Remove
-                </Button>
-                <Button onClick={this.showEditModal} variant="info" size="s">
+                <div id="itemName"><strong>{this.props.item.name}</strong></div>
+                <div id="itemComment">{this.props.item.notes}</div>
+                <Button className="coolButton" onClick={this.showEditModal} variant="info" size="sm">
                     Edit
+                </Button>
+                <Button className="coolButton" onClick={this.removeItem} variant="danger" size="sm">
+                    Remove
                 </Button>
             </div>
 
