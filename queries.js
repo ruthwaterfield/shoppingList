@@ -115,6 +115,38 @@ const editListItem = (request, response) => {
 	)
 }
 
+const resetSection = (request, response) => {
+	const sectionId = request.params.sectionId
+
+	pool.query('UPDATE list_items SET required=false WHERE section=$1;',
+		[sectionId],
+		function (error, result) {
+			if (error) {
+				console.log(error);
+				response.status(400).send('Sorry there was a problem!')
+			} else {
+				response.status(201)
+			}
+		}
+	)
+}
+
+const deleteListItem = (request, response) => {
+	const itemId = request.params.itemId
+
+	pool.query('DELETE FROM list_items WHERE id=$1;',
+		[itemId],
+		function (error, result) {
+			if (error) {
+				console.log(error);
+				response.status(400).send('Sorry there was a problem!')
+			} else {
+				response.status(201)
+			}
+		}
+	)
+}
+
 module.exports = {
 	getSections,
 	getPotentialItemsForSection,
@@ -122,5 +154,7 @@ module.exports = {
 	getNotRequiredItemsForSection,
 	getListItem,
 	addListItem,
-	editListItem
+	editListItem,
+	resetSection,
+	deleteListItem
 }
