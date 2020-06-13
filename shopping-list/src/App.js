@@ -49,11 +49,11 @@ class App extends Component {
 			<div className = "App" >
 				<div className = "App-header" >
 					<img src = {logo} className = "App-logo"alt = "logo"/>
-					<Button className="coolButton" onClick={this.doPrint} size="lg">Print</Button>
 					{this.state.readOnly?
 					<Button className="coolButton" onClick={this.hideReadOnly} size="lg">Hide Read Only View</Button>
 					:<Button className="coolButton" onClick={this.showReadOnly} size="lg">Show Read Only View</Button>
 					}
+					<Button className="coolButton" onClick={this.doPrint} size="lg">Print</Button>
 				</div> 
 				{this.state.readOnly ?
 				<ReadOnlyList sections={this.state.sections} />
