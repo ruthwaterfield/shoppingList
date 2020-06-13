@@ -35,13 +35,6 @@ class Section extends Component {
 
     componentDidMount() {
         this.getRequiredItems()
-
-        axios.get(baseUrl+'/sectionPotentialItems/'+this.props.sectionId).then(response => {
-                this.setState({allSectionItems: response.data})
-            }).catch(error => {
-                console.log(error)
-            }
-        )
     }
 
     getRequiredItems() {
@@ -74,7 +67,14 @@ class Section extends Component {
     }
 
     showProcessSectionModal() {
-        this.setState({showProcessSectionModal: true})
+        axios.get(baseUrl+'/sectionPotentialItems/'+this.props.sectionId).then(response => {
+            this.setState({
+                allSectionItems: response.data,
+                showProcessSectionModal: true
+            })
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     hideProcessSectionModal() {
@@ -121,11 +121,11 @@ class Section extends Component {
                 <Button className="coolButton" onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
                     Other Items
                 </Button>
-                <Button className="coolButton" onClick={this.showAddItemModal}  variant="dark" size="sm">
-                    New Item
-                </Button>
-                <Button className="coolButton" onClick={this.showProcessSectionModal} variant="secondary" size="sm">
+                <Button className="coolButton" onClick={this.showProcessSectionModal} variant="dark" size="sm">
                     Process Section
+                </Button>
+                <Button className="coolButton" onClick={this.showAddItemModal}  variant="success" size="sm">
+                    New Item
                 </Button>
                 <Button className="coolButton" onClick={this.resetSection} variant="danger" size="sm">
                     Reset Section
