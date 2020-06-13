@@ -55,7 +55,7 @@ class Section extends Component {
     }
 
     resetSection() {
-        axios.post(baseurl + '/resetSection/' + this.props.sectionId).then(response => {
+        axios.post(baseUrl + '/resetSection/' + this.props.sectionId).then(response => {
             this.getRequiredItems()
         }).catch(error => {
             console.log(error)
