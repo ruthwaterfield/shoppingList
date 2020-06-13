@@ -26,7 +26,7 @@ class ListItem extends Component{
             required: false,
             notes: this.props.item.notes
         }).then(response => {
-        this.props.reloadSection()
+            this.props.reloadSection()
         }).catch(error => {
             console.log(error)
         })

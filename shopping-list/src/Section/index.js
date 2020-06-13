@@ -1,13 +1,12 @@
+import axios from 'axios'
 import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
-import axios from 'axios'
 
 import AddItemModal from '../AddItemModal'
-import ProcessListModal from '../ProcessListModal'
 import baseUrl from '../baseurl'
+import ProcessListModal from '../ProcessListModal'
 import ListItem from '../ListItem'
 import './List.css'
-
 
 class Section extends Component {
     constructor(props) {
@@ -22,6 +21,7 @@ class Section extends Component {
         }
 
         this.getRequiredItems = this.getRequiredItems.bind(this)
+        this.resetSection = this.resetSection.bind(this)
 
         this.showAddItemModal = this.showAddItemModal.bind(this)
         this.hideAddItemModal = this.hideAddItemModal.bind(this)
@@ -49,6 +49,14 @@ class Section extends Component {
             this.setState({
                 requiredItems: response.data
             })
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    resetSection() {
+        axios.post(baseurl + '/resetSection/' + this.props.sectionId).then(response => {
+            this.getRequiredItems()
         }).catch(error => {
             console.log(error)
         })
@@ -117,10 +125,10 @@ class Section extends Component {
                     New Item
                 </Button>
                 <Button className="coolButton" onClick={this.showProcessSectionModal} variant="secondary" size="sm">
-                    Redo Section
+                    Process Section
                 </Button>
-                <Button className="coolButton" variant="danger" size="sm">
-                    Clear Section
+                <Button className="coolButton" onClick={this.resetSection} variant="danger" size="sm">
+                    Reset Section
                 </Button>
             </div>
 
