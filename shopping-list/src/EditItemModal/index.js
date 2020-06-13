@@ -34,7 +34,9 @@ class EditItemModal extends Component{
             notes: this.state.notes
         }).then(
             this.props.hideModal()
-        )
+        ).catch(error => {
+            console.log(error)
+        })
     }
 
     changeName(event) {

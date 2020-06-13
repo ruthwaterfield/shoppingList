@@ -25,8 +25,11 @@ class ListItem extends Component{
             section: this.props.item.section,
             required: false,
             notes: this.props.item.notes
-        })
+        }).then(response => {
         this.props.reloadSection()
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     showEditModal() {
