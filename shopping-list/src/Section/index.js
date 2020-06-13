@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import axios from 'axios'
 
+import AddItemModal from '../AddItemModal'
 import ProcessListModal from '../ProcessListModal'
 import baseUrl from '../baseurl'
 import ListItem from '../ListItem'
 import './List.css'
+
 
 class Section extends Component {
     constructor(props) {
@@ -14,15 +16,15 @@ class Section extends Component {
             requiredItems:[],
             allSectionItems:[],
             additionalItems:[],
-            addValue: "",
+            showAddItemModal: false,
             showProcessSectionModal: false,
             showAdditionalItemsModal: false
         }
-        this.addNewItemToContents = this.addNewItemToContents.bind(this)
 
         this.getRequiredItems = this.getRequiredItems.bind(this)
 
-        this.handleAddTextChange = this.handleAddTextChange.bind(this)
+        this.showAddItemModal = this.showAddItemModal.bind(this)
+        this.hideAddItemModal = this.hideAddItemModal.bind(this)
 
         this.showProcessSectionModal = this.showProcessSectionModal.bind(this)
         this.hideProcessSectionModal = this.hideProcessSectionModal.bind(this)
@@ -49,6 +51,17 @@ class Section extends Component {
             })
         }).catch(error => {
             console.log(error)
+        })
+    }
+
+    showAddItemModal() {
+        this.setState({showAddItemModal: true})
+    }
+
+    hideAddItemModal() {
+        this.getRequiredItems()
+        this.setState({
+            showAddItemModal: false,
         })
     }
 
@@ -81,20 +94,6 @@ class Section extends Component {
         })
     }
 
-    addNewItemToContents(event) {
-        // call api to save item
-        this.setState({requiredItems: this.state.requiredItems.concat({name:this.state.addValue, comment: ""})})
-        axios.post(baseUrl+'/listitem/add', {name: this.state.addValue, section: this.props.id, required: true, notes: ""}).then(
-
-            )
-        event.preventDefault()
-        this.setState({addValue: ""})
-    }
-
-    handleAddTextChange(event) {
-        this.setState({addValue: event.target.value})
-    }
-
     render() {
         return (
         <div className="list">
@@ -114,7 +113,7 @@ class Section extends Component {
                 <Button className="coolButton" onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
                     Other Items
                 </Button>
-                <Button className="coolButton" variant="dark" size="sm">
+                <Button className="coolButton" onClick={this.showAddItemModal}  variant="dark" size="sm">
                     New Item
                 </Button>
                 <Button className="coolButton" onClick={this.showProcessSectionModal} variant="secondary" size="sm">
@@ -124,10 +123,12 @@ class Section extends Component {
                     Clear Section
                 </Button>
             </div>
-            <Form onSubmit={this.addNewItemToContents} className="ingredientForm">
-                <Form.Control type="text" value={this.state.addValue} onChange={this.handleAddTextChange}/>
-                <Button type="submit">Submit</Button>
-            </Form>
+
+            <AddItemModal
+                show={this.state.showAddItemModal}
+                hideModal={this.hideAddItemModal}
+                sectionId={this.props.sectionId}
+            />
 
             <ProcessListModal 
                 show={this.state.showProcessSectionModal}
