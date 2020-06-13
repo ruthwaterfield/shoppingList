@@ -68,14 +68,14 @@ class EditItemModal extends Component{
                             Notes
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control type="text" placeholder="Notes" value={this.state.nanotesme} onChange={this.changeNotes}/>
+                            <Form.Control type="text" placeholder="Notes" value={this.state.notes} onChange={this.changeNotes}/>
                         </Col>
                     </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={this.props.hideModal}>Cancel</Button>
-                    <Button variant="success" onClick={this.editItem}>Edit Item</Button>
+                    <Button variant="success" onClick={this.editItem}>Save</Button>
                 </Modal.Footer>
         </Modal>)
     }

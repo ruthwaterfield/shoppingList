@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Modal, Col, Form, Button }  from 'react-bootstrap'
+import React, { Component, Fragment } from 'react'
+import { Modal, Row, Col, Form, Button }  from 'react-bootstrap'
 import axios from 'axios'
 
 import baseUrl from '../baseurl'
@@ -12,20 +12,26 @@ class ProcessListModal extends Component{
         }
         
         this.editItem = this.editItem.bind(this)
+        this.deleteItem = this.deleteItem.bind(this)
+
         this.requireItem = this.requireItem.bind(this)
         this.notRequireItem = this.notRequireItem.bind(this)
         this.nextItem = this.nextItem.bind(this)
+
+        this.changeName = this.changeName.bind(this)
         this.changeNotes = this.changeNotes.bind(this)
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.show &&
             !prevProps.show &&
-            this.props.processList.length > 0) {
+            this.props.processList.length > 0){
+                const firstItem = this.props.processList[0]
             this.setState({
                 currentItemPosition: 0,
-                currentItem: this.props.processList[0],
-                currentNotes: "",
+                currentItem: firstItem,
+                currentName: firstItem.name,
+                currentNotes: firstItem.notes,
                 needToProcess: true
             })
         }
@@ -46,22 +52,37 @@ class ProcessListModal extends Component{
             required: required,
             notes: this.state.currentNotes
         }).then(response => {
-            this.setState({
-                currentNotes: ""
-            })
             this.nextItem()
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    deleteItem() {
+        axios.delete(baseUrl + '/listitem/' + this.state.currentItem.id).then(response => {
+            this.nextItem()
+        }).catch(error => {
+            console.log(error)
         })
     }
 
     nextItem() {
-        if (this.state.currentItemPosition < this.props.processList.length - 1) {
+        const nextItemPosition = this.state.currentItemPosition + 1
+        if (nextItemPosition < this.props.processList.length) {
+            const nextItem = this.props.processList[nextItemPosition]
             this.setState({
-                currentItemPosition: this.state.currentItemPosition + 1,
-                currentItem: this.props.processList[this.state.currentItemPosition + 1]
+                currentItemPosition: nextItemPosition,
+                currentItem: nextItem,
+                currentName: nextItem.name,
+                currentNotes: nextItem.notes
             })
         } else {
             this.setState({needToProcess: false})
         }
+    }
+
+    changeName(event) {
+        this.setState({currentName: event.target.value})
     }
 
     changeNotes(event) {
@@ -71,33 +92,48 @@ class ProcessListModal extends Component{
     render() {
         return (
         <Modal show={this.props.show} onHide={this.props.hideModal} centered="true" size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Processing {this.props.section} List</Modal.Title>
-            </Modal.Header>
             {this.state.needToProcess ?
-            <div>
+            <Fragment>
+                <Modal.Header closeButton>
+                    <Modal.Title>Processing {this.props.section} - {this.state.currentName}</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
-                    <h2>Item: <strong>{this.state.currentItem.name}</strong></h2>
                     <Form className="processItemForm">
-                        <Form.Row>
-                            <Col><Form.Label>Notes</Form.Label></Col>
-                            <Col><Form.Control type="text" placeholder="Notes" value={this.state.currentNotes} onChange={this.changeNotes}/></Col>
-                        </Form.Row>
+                    <Form.Group as={Row} controlId="formName">
+                        <Form.Label column sm="2">
+                            Name
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control type="text" placeholder="Item name" value={this.state.currentName} onChange={this.changeName}/>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formName">
+                        <Form.Label column sm="2">
+                            Notes
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control type="text" placeholder="Notes" value={this.state.currentNotes} onChange={this.changeNotes}/>
+                        </Col>
+                    </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={this.notRequireItem}>No, ta</Button>
-                    <Button variant="success" onClick={this.requireItem}>Yes pls</Button>
+                    <Button className="mr-auto" variant="warning" onClick={this.deleteItem}>Delete Item Forever</Button>
+                    <Button variant="danger" onClick={this.notRequireItem}>Not Today</Button>
+                    <Button variant="success" onClick={this.requireItem}>Yes Please!</Button>
                 </Modal.Footer>
-            </div>
-            :<div>
+            </Fragment>
+            :<Fragment>
+                <Modal.Header closeButton>
+                    <Modal.Title>Processing {this.props.section}</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
                     <div>Nothing to process- all done!</div> 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.hideModal}>Finished!</Button>
+                    <Button variant="primary" onClick={this.props.hideModal}>Finished!</Button>
                 </Modal.Footer>
-            </div>}
+            </Fragment>}
         </Modal>)
     }
 }
