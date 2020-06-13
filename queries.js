@@ -125,23 +125,23 @@ const resetSection = (request, response) => {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				response.status(201)
+				response.status(200).send()
 			}
 		}
 	)
 }
 
 const deleteListItem = (request, response) => {
-	const itemId = request.params.itemId
+	const itemId = parseInt(request.params.itemId)
 
-	pool.query('DELETE FROM list_items WHERE id=$1;',
+	pool.query('DELETE FROM list_items WHERE id = $1;',
 		[itemId],
 		function (error, result) {
 			if (error) {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
 			} else {
-				response.status(201)
+				response.status(200).send()
 			}
 		}
 	)
