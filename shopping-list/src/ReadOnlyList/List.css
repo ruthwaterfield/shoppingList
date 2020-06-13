@@ -1,0 +1,38 @@
+.list {
+    background-color: #55aaff;
+    flex-basis: 40%;
+    margin: 2px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.listItemCollection {
+    flex-grow: 1;
+}
+
+h2 {
+    margin: 4px;
+}
+
+.coolButton {
+    width: 20%;
+}
+
+
+.ingredientForm {
+    display: flex;
+    flex-direction: row;
+    margin: 4px;
+    justify-self: flex-end;
+}
+
+.spacedRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px;
+}

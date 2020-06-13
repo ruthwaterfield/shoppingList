@@ -1,24 +1,25 @@
-import React, {
-	Component
-} from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
+import Button from 'react-bootstrap/Button'
 
-import Section from './Section';
 import './App.css';
 import baseUrl from './baseurl'
-
-import Button from 'react-bootstrap/Button'
+import logo from './logo.svg'
+import ReadOnlyList from './ReadOnlyList'
+import Section from './Section'
 
 class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			readOnly: false,
 			sections: []
 		}
 
 		this.doPrint = this.doPrint.bind(this)
+		this.showReadOnly = this.showReadOnly.bind(this)
+		this.hideReadOnly = this.hideReadOnly.bind(this)
 	}
 
 	componentDidMount() {
@@ -35,18 +36,33 @@ class App extends Component {
 		window.print()
 	}
 
+	showReadOnly() {
+		this.setState({readOnly: true})
+	}
+
+	hideReadOnly() {
+		this.setState({readOnly: false})
+	}
+
 	render() {
 		return ( 
 			<div className = "App" >
 				<div className = "App-header" >
 					<img src = {logo} className = "App-logo"alt = "logo"/>
-					<Button onClick={this.doPrint}>Print</Button>
+					<Button onClick={this.doPrint} size="lg">Print</Button>
+					{this.state.readOnly?
+					<Button onClick={this.hideReadOnly} size="lg">Hide Read Only View</Button>
+					:<Button onClick={this.showReadOnly} size="lg">Show Read Only View</Button>
+					}
 				</div> 
-				<div className = "List-Holder"> {
+				{this.state.readOnly ?
+				<ReadOnlyList sections={this.state.sections} />
+				:<div className = "List-Holder"> {
 					this.state.sections.map(item =>
 						<Section sectionId={item.id} section={item.section} key={item.id} />
 					)}
 				</div>
+				}
 			</div>
 		)
 	}
