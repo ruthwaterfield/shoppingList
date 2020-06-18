@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
+import { Form, Container, Row, Col} from 'react-bootstrap'
 
 import baseUrl from '../baseurl'
 import './List.css'
@@ -41,14 +42,15 @@ class ReadOnlyList extends Component {
                         <div className="spacedRow">
                             <h2>{section.sectionName}</h2>
                         </div>
-                        <div className="listItemCollection">
+                        <Container className="listItemCollection">
                             {section.requiredItems.map(item => 
-                            <div className="item" key={item.id}>
-                                <div id="itemName"><strong>{item.name}</strong></div>
-                                <div id="itemComment">{item.notes}</div>
-                            </div>
+                            <Row className="item" key={item.id}>
+                                <Col xs={1}><Form.Check inline/></Col>
+                                <Col xs={3}><strong>{item.name}</strong></Col>
+                                <Col>{item.notes}</Col>
+                            </Row>
                             )}
-                        </div>
+                        </Container>
                     </div>)
                 }
             </div>
