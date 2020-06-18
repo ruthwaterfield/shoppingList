@@ -56,3 +56,13 @@ html {
   height: 50%;
   margin: 8px;
 }
+
+.bgColor {
+  background-color: #55aaff;
+  flex-basis: 40%;
+}
+
+.readOnlyItem {
+  color: #682342;
+  background-color: #66bbff;
+}
