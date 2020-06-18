@@ -117,7 +117,7 @@ class Section extends Component {
                     />
                 )}
             </div>
-            <div className="spacedRow">
+            <div className="d-flex justify-content-between p-1">
                 <Button className="coolButton" onClick={this.showAdditionalItemsModal} variant="secondary" size="sm">
                     Other Items
                 </Button>

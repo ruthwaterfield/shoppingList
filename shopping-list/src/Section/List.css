@@ -2,9 +2,3 @@
     width: 20%;
 }
 
-.spacedRow {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 2px;
-}

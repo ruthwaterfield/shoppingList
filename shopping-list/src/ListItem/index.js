@@ -43,7 +43,7 @@ class ListItem extends Component{
     render() {
         return (
             <Fragment>
-            <Container className="m-1 p-2 itemColors rounded">
+            <Container className="m-1 pl-3 pr-3 pt-2 pb-2 itemColors rounded">
                 <Row>
                     <Col xs={3}><strong>{this.props.item.name}</strong></Col>
                     <Col>{this.props.item.notes}</Col>
