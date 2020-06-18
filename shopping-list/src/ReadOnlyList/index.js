@@ -37,7 +37,7 @@ class ReadOnlyList extends Component {
         return (
             <div className = "List-Holder">
                 {this.state.requiredItemsBySection.map(section => 
-                    <div className="bgColor m-2 p-2 position-relative justify-content-between text-left" key={section.id}>
+                    <div className="bgColor m-2 p-2 position-relative justify-content-between text-left" key={section.sectionName}>
                         <h2 className="m-2">{section.sectionName}</h2>
                         <Container className="flex-grow-1">
                             {section.requiredItems.map(item => 
