@@ -104,11 +104,11 @@ class Section extends Component {
 
     render() {
         return (
-        <div className="list">
-            <div className="spacedRow">
-                <h2>{this.props.section}</h2>
+        <div className="bgColor m-2 p-3 text-left d-flex position-relative justify-content-between flex-column rounded w-40">
+            <div className="p-1">
+                <h2 m-4>{this.props.section}</h2>
             </div>
-            <div className="listItemCollection">
+            <div className="flex-grow-1">
                 {this.state.requiredItems.map(item => 
                     <ListItem 
                         item={item} 

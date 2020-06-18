@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import Button from 'react-bootstrap/Button'
+import {Container, Col, Row, Button } from 'react-bootstrap'
 import axios from 'axios'
 
 import baseUrl from '../baseurl'
-import './ListItem.css'
 import EditItemModal from '../EditItemModal'
 
 class ListItem extends Component{
@@ -44,16 +43,22 @@ class ListItem extends Component{
     render() {
         return (
             <Fragment>
-            <div className="item">
-                <div id="itemName"><strong>{this.props.item.name}</strong></div>
-                <div id="itemComment">{this.props.item.notes}</div>
-                <Button className="coolButton" onClick={this.showEditModal} variant="outline-primary" size="sm">
-                    Edit
-                </Button>
-                <Button className="coolButton" onClick={this.removeItem} variant="outline-danger" size="sm">
-                    Remove
-                </Button>
-            </div>
+            <Container className="m-1 p-2 itemColors rounded">
+                <Row>
+                    <Col xs={3}><strong>{this.props.item.name}</strong></Col>
+                    <Col>{this.props.item.notes}</Col>
+                    <Col xs={2}>
+                        <Button onClick={this.showEditModal} variant="outline-primary" size="sm" className="w-100">
+                            Edit
+                        </Button>
+                    </Col>
+                    <Col xs={2}>
+                        <Button onClick={this.removeItem} variant="outline-danger" size="sm" className="w-100">
+                            Remove
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
 
             <EditItemModal 
                 show={this.state.showEditModal}
