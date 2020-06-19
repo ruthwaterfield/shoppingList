@@ -20,10 +20,10 @@ const getSections = (request, response) => {
 	})
 }
 
-const getPotentialItemsForSection = (request, response) => {
+const getRegularItemsForSection = (request, response) => {
 	var sectionId = request.params.sectionId;
 
-	pool.query('SELECT * FROM list_items WHERE section=$1 ORDER BY id ASC;', [sectionId], function (error, results) {
+	pool.query('SELECT * FROM list_items WHERE section=$1 AND regular=true AND required=false ORDER BY id ASC;', [sectionId], function (error, results) {
 		if (error) {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
@@ -46,10 +46,10 @@ const getRequiredItemsForSection = (request, response) => {
 	})
 }
 
-const getNotRequiredItemsForSection = (request, response) => {
+const getIrregularItemsForSection = (request, response) => {
 	var sectionId = request.params.sectionId;
 
-	pool.query('SELECT * FROM list_items WHERE section=$1 AND required=false ORDER BY id ASC;', [sectionId], function (error, results) {
+	pool.query('SELECT * FROM list_items WHERE section=$1 AND regular=false AND required=false ORDER BY id ASC;', [sectionId], function (error, results) {
 		if (error) {
 			console.log(error);
 			response.status(400).send('Sorry there was a problem!')
@@ -79,10 +79,12 @@ const addListItem = (request, response) => {
 		name,
 		section,
 		required,
+		regular,
+		temporary,
 		notes
 	} = request.body
-	pool.query('INSERT INTO list_items(name, section, required, notes) VALUES($1, $2, $3, $4) returning *;',
-		[name, section, required, notes],
+	pool.query('INSERT INTO list_items(name, section, required, regular, temporarnt, notes) VALUES($1, $2, $3, $4, $5, $6) returning *;',
+		[name, section, required, regular, temporary, notes],
 		function (error, result) {
 			if (error) {
 				console.log(error);
@@ -100,10 +102,12 @@ const editListItem = (request, response) => {
 		name,
 		section,
 		required,
+		regular,
+		temporary,
 		notes
 	} = request.body
-	pool.query('UPDATE list_items SET name=$1, section=$2, required=$3, notes=$4 WHERE id=$5 returning *;',
-		[name, section, required, notes, itemId],
+	pool.query('UPDATE list_items SET name=$1, section=$2, required=$3, regular=$4, temporary=$5, notes=$6 WHERE id=$7 returning *;',
+		[name, section, required, regular, temporary, notes, itemId],
 		function (error, result) {
 			if (error) {
 				console.log(error);
@@ -118,17 +122,40 @@ const editListItem = (request, response) => {
 const resetSection = (request, response) => {
 	const sectionId = request.params.sectionId
 
-	pool.query('UPDATE list_items SET required=false WHERE section=$1;',
-		[sectionId],
-		function (error, result) {
-			if (error) {
+	let deleteTemporaryItems = new Promise((resolve, reject) => {
+		pool.query('DELETE FROM list_items WHERE temporary=true AND section=$1;',
+			[sectionId],
+			function (error, result) {
+				if (error) {
+					reject(error)
+				} else {
+					resolve()
+				}
+			}
+		)
+	})
+
+	let takeAllItemsOffList = new Promise((resolve, reject) => {
+		pool.query('UPDATE list_items SET required=false WHERE section=$1;',
+			[sectionId],
+			function (error, result) {
+				if (error) {
+					reject(error)
+				} else {
+					resolve()
+				}
+			}
+		)
+	})
+
+	Promise.all([deleteTemporaryItems, takeAllItemsOffList])
+			.then(() => {
+				response.status(200).send()
+			})
+			.catch((error) => {
 				console.log(error);
 				response.status(400).send('Sorry there was a problem!')
-			} else {
-				response.status(200).send()
-			}
-		}
-	)
+			})
 }
 
 const deleteListItem = (request, response) => {
@@ -149,9 +176,9 @@ const deleteListItem = (request, response) => {
 
 module.exports = {
 	getSections,
-	getPotentialItemsForSection,
+	getRegularItemsForSection,
 	getRequiredItemsForSection,
-	getNotRequiredItemsForSection,
+	getIrregularItemsForSection,
 	getListItem,
 	addListItem,
 	editListItem,

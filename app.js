@@ -19,9 +19,9 @@ app.get('/', (request, response) => {
   })
 
 app.get('/sections', db.getSections)
-app.get('/sectionPotentialItems/:sectionId', db.getPotentialItemsForSection)
+app.get('/sectionRegularItems/:sectionId', db.getRegularItemsForSection)
 app.get('/sectionRequiredItems/:sectionId', db.getRequiredItemsForSection)
-app.get('/sectionNotRequiredItems/:sectionId', db.getNotRequiredItemsForSection)
+app.get('/sectionIrregularItems/:sectionId', db.getIrregularItemsForSection)
 app.get('/listItem/:itemId', db.getListItem)
 
 
