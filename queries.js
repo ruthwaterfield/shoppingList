@@ -83,7 +83,7 @@ const addListItem = (request, response) => {
 		temporary,
 		notes
 	} = request.body
-	pool.query('INSERT INTO list_items(name, section, required, regular, temporarnt, notes) VALUES($1, $2, $3, $4, $5, $6) returning *;',
+	pool.query('INSERT INTO list_items(name, section, required, regular, temporary, notes) VALUES($1, $2, $3, $4, $5, $6) returning *;',
 		[name, section, required, regular, temporary, notes],
 		function (error, result) {
 			if (error) {
