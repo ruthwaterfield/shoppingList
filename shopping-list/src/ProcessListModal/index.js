@@ -14,6 +14,8 @@ class ProcessListModal extends Component{
         this.editItem = this.editItem.bind(this)
         this.deleteItem = this.deleteItem.bind(this)
 
+        this.handleKeyPress = this.handleKeyPress.bind(this)
+
         this.requireItem = this.requireItem.bind(this)
         this.notRequireItem = this.notRequireItem.bind(this)
         this.nextItem = this.nextItem.bind(this)
@@ -34,6 +36,12 @@ class ProcessListModal extends Component{
                 currentNotes: firstItem.notes,
                 needToProcess: true
             })
+        }
+    }
+
+    handleKeyPress(event) {
+        if (event.key === 'Enter') { 
+        this.editItem(true)
         }
     }
 
@@ -93,7 +101,7 @@ class ProcessListModal extends Component{
 
     render() {
         return (
-        <Modal show={this.props.show} onHide={this.props.hideModal} centered="true" size="lg">
+        <Modal show={this.props.show} onHide={this.props.hideModal} centered="true" size="lg"  onKeyDown={this.handleKeyPress}>
             {this.state.needToProcess ?
             <Fragment>
                 <Modal.Header closeButton>
