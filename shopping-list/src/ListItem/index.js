@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import {Container, Col, Row, Button } from 'react-bootstrap'
+import { Container, Col, Row, Button, Badge } from 'react-bootstrap'
 import axios from 'axios'
 
 import baseUrl from '../baseurl'
@@ -44,11 +44,21 @@ class ListItem extends Component{
     }
 
     render() {
+        let itemBadge
+        if (this.props.item.regular) {
+            itemBadge = <Badge variant="secondary" className="ml-1">Regular</Badge>
+        } else if (this.props.item.temporary) {
+            itemBadge = <Badge variant="warning" className="ml-1">Temporary</Badge>
+        }
+
         return (
             <Fragment>
             <Container className="m-1 pl-3 pr-3 pt-2 pb-2 itemColors rounded">
                 <Row>
-                    <Col xs={3}><strong>{this.props.item.name}</strong></Col>
+                    <Col xs={4}>
+                        <strong>{this.props.item.name}</strong>
+                        {itemBadge}
+                    </Col>
                     <Col>{this.props.item.notes}</Col>
                     <Col xs={2}>
                         <Button onClick={this.showEditModal} variant="outline-primary" size="sm" className="w-100">
