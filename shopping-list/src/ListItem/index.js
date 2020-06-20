@@ -18,17 +18,20 @@ class ListItem extends Component{
         this.hideEditModal = this.hideEditModal.bind(this)
     }
 
-    removeItem() {
-        axios.post(baseUrl + '/listitem/edit/' + this.props.item.id, {
-            name: this.props.item.name,
-            section: this.props.item.section,
-            required: false,
-            notes: this.props.item.notes
-        }).then(response => {
+    async removeItem() {
+        try {
+            await axios.post(baseUrl + '/listitem/edit/' + this.props.item.id, {
+                name: this.props.item.name,
+                section: this.props.item.section,
+                required: false,
+                regular: this.props.item.regular,
+                temporary: this.props.item.temporary,
+                notes: this.props.item.notes
+            })
             this.props.reloadSection()
-        }).catch(error => {
-            console.log(error)
-        })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     showEditModal() {

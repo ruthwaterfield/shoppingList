@@ -47,9 +47,11 @@ class ProcessListModal extends Component{
 
     editItem(required) {
         axios.post(baseUrl + '/listitem/edit/' + this.state.currentItem.id, {
-            name: this.state.currentItem.name,
+            name: this.state.currentName,
             section: this.state.currentItem.section,
             required: required,
+            regular: this.state.currentItem.regular,
+            temporary: this.state.currentItem.temporary,
             notes: this.state.currentNotes
         }).then(response => {
             this.nextItem()

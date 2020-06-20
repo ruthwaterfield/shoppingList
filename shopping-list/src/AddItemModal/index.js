@@ -10,35 +10,44 @@ class AddItemModal extends Component{
 
         this.state = {
             name: "",
-            notes: ""
+            notes: "",
+            regular: false,
+            temporary: false
         }
         
         this.addItem = this.addItem.bind(this)
 
         this.changeName = this.changeName.bind(this)
         this.changeNotes = this.changeNotes.bind(this)
+        this.toggleRegular = this.toggleRegular.bind(this)
+        this.toggleTemporary = this.toggleTemporary.bind(this)
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.show && !prevProps.show) {
             this.setState({
                 name: "",
-                notes: ""
+                notes: "",
+                regular: false,
+                temporary: false
             })
         }
     }
 
-    addItem() {
-        axios.post(baseUrl + '/listitem/add', {
-            name: this.state.name,
-            section: this.props.sectionId,
-            required: true,
-            notes: this.state.notes
-        }).then(
+    async addItem() {
+        try {
+            await axios.post(baseUrl + '/listitem/add', {
+                name: this.state.name,
+                section: this.props.sectionId,
+                required: true,
+                regular: this.state.regular,
+                temporary: this.state.temporary,
+                notes: this.state.notes
+            })
             this.props.hideModal()
-        ).catch(error => {
-            console.log(error)
-        })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     changeName(event) {
@@ -47,6 +56,18 @@ class AddItemModal extends Component{
 
     changeNotes(event) {
         this.setState({notes: event.target.value})
+    }
+
+    toggleRegular() {
+        this.setState((state) => ({
+            regular: !state.regular
+          }))
+    }
+
+    toggleTemporary(event) {
+        this.setState((state) => ({
+            temporary: !state.regular
+          }))
     }
 
     render() {
@@ -71,6 +92,14 @@ class AddItemModal extends Component{
                         </Form.Label>
                         <Col sm="10">
                             <Form.Control type="text" placeholder="Notes" value={this.state.notes} onChange={this.changeNotes}/>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Col sm={{ span: 5, offset: 2 }}>
+                            <Form.Check inline label="Regular" type="checkbox" checked={this.state.regular} onChange={this.toggleRegular} />
+                        </Col>
+                        <Col sm="5">
+                            <Form.Check inline label="Temporary" type="checkbox" checked={this.state.temporary} onChange={this.toggleTemporary} />
                         </Col>
                     </Form.Group>
                     </Form>

@@ -13,8 +13,8 @@ class Section extends Component {
         super(props)
         this.state = {
             requiredItems:[],
-            allSectionItems:[],
-            additionalItems:[],
+            regularSectionItems:[],
+            irregularSectionItems:[],
             showAddItemModal: false,
             showProcessSectionModal: false,
             showAdditionalItemsModal: false
@@ -67,9 +67,9 @@ class Section extends Component {
     }
 
     showProcessSectionModal() {
-        axios.get(baseUrl+'/sectionPotentialItems/'+this.props.sectionId).then(response => {
+        axios.get(baseUrl+'/sectionRegularItems/'+this.props.sectionId).then(response => {
             this.setState({
-                allSectionItems: response.data,
+                regularSectionItems: response.data,
                 showProcessSectionModal: true
             })
         }).catch(error => {
@@ -85,9 +85,9 @@ class Section extends Component {
     }
 
     showAdditionalItemsModal() {
-        axios.get(baseUrl + '/sectionNotRequiredItems/' + this.props.sectionId).then(response => {
+        axios.get(baseUrl + '/sectionIrregularItems/' + this.props.sectionId).then(response => {
             this.setState({
-                additionalItems: response.data,
+                irregularSectionItems: response.data,
                 showAdditionalItemsModal: true
             })
         }).catch(error => {
@@ -122,7 +122,7 @@ class Section extends Component {
                     Other Items
                 </Button>
                 <Button className="coolButton" onClick={this.showProcessSectionModal} variant="dark" size="sm">
-                    Process Section
+                    Regular Items
                 </Button>
                 <Button className="coolButton" onClick={this.showAddItemModal}  variant="success" size="sm">
                     New Item
@@ -142,14 +142,14 @@ class Section extends Component {
                 show={this.state.showProcessSectionModal}
                 hideModal={this.hideProcessSectionModal}
                 section={this.props.section}
-                processList={this.state.allSectionItems}
+                processList={this.state.regularSectionItems}
             />
 
             <ProcessListModal 
                 show={this.state.showAdditionalItemsModal}
                 hideModal={this.hideAdditionalItemsModal}
                 section={this.props.section}
-                processList={this.state.additionalItems}
+                processList={this.state.irregularSectionItems}
             />
         </div>
     )}

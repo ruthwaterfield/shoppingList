@@ -10,33 +10,42 @@ class EditItemModal extends Component{
 
         this.state = {
             name: "",
-            notes: ""
+            regular: false,
+            temporary: false,
+            notes: "",
         }
         
         this.editItem = this.editItem.bind(this)
 
         this.changeName = this.changeName.bind(this)
         this.changeNotes = this.changeNotes.bind(this)
+        this.toggleRegular = this.toggleRegular.bind(this)
+        this.toggleTemporary = this.toggleTemporary.bind(this)
     }
 
     componentDidMount() {
         this.setState({
             name: this.props.item.name,
+            regular: this.props.item.regular,
+            temporary: this.props.item.temporary,
             notes: this.props.item.notes
         })
     }
 
-    editItem() {
-        axios.post(baseUrl + '/listitem/edit/' + this.props.item.id, {
-            name: this.state.name,
-            section: this.props.item.section,
-            required: this.props.item.required,
-            notes: this.state.notes
-        }).then(
+    async editItem() {
+        try {
+            await axios.post(baseUrl + '/listitem/edit/' + this.props.item.id, {
+                name: this.state.name,
+                section: this.props.item.section,
+                required: this.props.item.required,
+                regular: this.state.regular,
+                temporary: this.state.temporary,
+                notes: this.state.notes
+            })
             this.props.hideModal()
-        ).catch(error => {
-            console.log(error)
-        })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     changeName(event) {
@@ -45,6 +54,18 @@ class EditItemModal extends Component{
 
     changeNotes(event) {
         this.setState({notes: event.target.value})
+    }
+
+    toggleRegular() {
+        this.setState((state) => ({
+            regular: !state.regular
+          }))
+    }
+
+    toggleTemporary(event) {
+        this.setState((state) => ({
+            temporary: !state.regular
+          }))
     }
 
     render() {
@@ -69,6 +90,14 @@ class EditItemModal extends Component{
                         </Form.Label>
                         <Col sm="10">
                             <Form.Control type="text" placeholder="Notes" value={this.state.notes} onChange={this.changeNotes}/>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Col sm={{ span: 5, offset: 2 }}>
+                            <Form.Check inline label="Regular" type="checkbox" checked={this.state.regular} onChange={this.toggleRegular} />
+                        </Col>
+                        <Col sm="5">
+                            <Form.Check inline label="Temporary" type="checkbox" checked={this.state.temporary} onChange={this.toggleTemporary} />
                         </Col>
                     </Form.Group>
                     </Form>
