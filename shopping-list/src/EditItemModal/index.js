@@ -20,7 +20,7 @@ export default function EditItemModal(props) {
         setNotes(props.item.notes)
         setRegular(props.item.regular)
         setTemporary(props.item.temporary)
-        }, [props])
+        }, [props.item])
 
     async function editItem() {
         try {
