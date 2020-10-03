@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: row;
   align-items: left;
-  justify-content: left;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -29,7 +29,7 @@
 }
 
 .List-Holder {
-  background-color: #88aaff;
+  background-color: #5588ee;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -39,7 +39,7 @@
 }
 
 html {
-  background-color: #88aaff;
+  background-color: #5588ee;
 }
 
 @keyframes App-logo-spin {
@@ -49,4 +49,20 @@ html {
   to {
     transform: rotate(360deg);
   }
+}
+
+.coolButton {
+  width: 10%;
+  height: 50%;
+  margin: 8px;
+}
+
+.bgColor {
+  background-color: #55aaff;
+  flex-basis: 40%;
+}
+
+.itemColors {
+  color: #682342;
+  background-color: #66bbff;
 }

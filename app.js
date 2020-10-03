@@ -19,15 +19,18 @@ app.get('/', (request, response) => {
   })
 
 app.get('/sections', db.getSections)
-app.get('/sectionPotentialItems/:sectionId', db.getPotentialItemsForSection)
+app.get('/sectionRegularItems/:sectionId', db.getRegularItemsForSection)
 app.get('/sectionRequiredItems/:sectionId', db.getRequiredItemsForSection)
-app.get('/sectionNotRequiredItems/:sectionId', db.getNotRequiredItemsForSection)
+app.get('/sectionIrregularItems/:sectionId', db.getIrregularItemsForSection)
 app.get('/listItem/:itemId', db.getListItem)
 
 
 // Express routes for the HTTP 'POST' methods
 app.post('/listItem/add', db.addListItem)
 app.post('/listItem/edit/:itemId', db.editListItem)
+app.post('/resetSection/:sectionId', db.resetSection)
+
+app.delete('/listItem/:itemId', db.deleteListItem)
 
 // Set a port for the app to listen on
 app.listen(app.settings.port, function () {
