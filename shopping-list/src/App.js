@@ -19,12 +19,8 @@ export default function App() {
 
 	useEffect(() => {
 		axios.get(baseUrl + '/sections')
-		.then(response => {
-			setSections(response.data)
-		})
-		.catch(error => {
-			console.log(error)
-		})
+		.then(response => setSections(response.data))
+		.catch(error => console.log(error))
         }, []
     )
 

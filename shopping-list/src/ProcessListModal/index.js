@@ -61,19 +61,15 @@ class ProcessListModal extends Component{
             regular: this.state.currentItem.regular,
             temporary: this.state.currentItem.temporary,
             notes: this.state.currentNotes
-        }).then(response => {
-            this.nextItem()
-        }).catch(error => {
-            console.log(error)
         })
+        .then(response => this.nextItem())
+        .catch(error => console.log(error))
     }
 
     deleteItem() {
-        axios.delete(baseUrl + '/listitem/' + this.state.currentItem.id).then(response => {
-            this.nextItem()
-        }).catch(error => {
-            console.log(error)
-        })
+        axios.delete(baseUrl + '/listitem/' + this.state.currentItem.id)
+        .then(response => this.nextItem())
+        .catch(error => console.log(error))
     }
 
     nextItem() {

@@ -10,17 +10,16 @@ export default function ReadOnlyList(props) {
     useEffect(() => {
         const getRequiredItemsForSection = (section) => {
             axios.get(baseUrl + '/sectionRequiredItems/' + section.id)
-            .then(response => {
-                setRequiredItemsBySection(previousSections => 
-                    previousSections.concat({
-                    sectionId: section.id,
-                    sectionName: section.section,
-                    requiredItems: response.data 
-                }))
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            .then(response => setRequiredItemsBySection(previousSections => 
+                    previousSections.concat(
+                        {
+                            sectionId: section.id,
+                            sectionName: section.section,
+                            requiredItems: response.data 
+                        }
+                    )
+            ))
+            .catch(error => console.log(error))
         }
 
         props.sections.forEach(section => {
