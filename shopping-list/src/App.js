@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
 import Button from 'react-bootstrap/Button'
@@ -9,63 +9,39 @@ import logo from './logo.svg'
 import ReadOnlyList from './ReadOnlyList'
 import Section from './Section'
 
-class App extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			readOnly: false,
-			sections: []
-		}
+export default function App() {
+	const [readOnly, setReadOnly] = useState(false)
+	const [sections, setSections] = useState([])
 
-		this.doPrint = this.doPrint.bind(this)
-		this.showReadOnly = this.showReadOnly.bind(this)
-		this.hideReadOnly = this.hideReadOnly.bind(this)
-	}
+	const doPrint = () => window.print()
+	const showReadOnly = () => setReadOnly(true)
+	const hideReadOnly = () => setReadOnly(false)
 
-	componentDidMount() {
-		axios.get(baseUrl + '/sections').then(response => {
-			this.setState({
-				sections: response.data
-			})
-		}).catch(error => {
-			console.log(error)
-		})
-	}
+	useEffect(() => {
+		axios.get(baseUrl + '/sections')
+		.then(response => setSections(response.data))
+		.catch(error => console.log(error))
+        }, []
+    )
 
-	doPrint() {
-		window.print()
-	}
-
-	showReadOnly() {
-		this.setState({readOnly: true})
-	}
-
-	hideReadOnly() {
-		this.setState({readOnly: false})
-	}
-
-	render() {
-		return ( 
+	return ( 
 			<div className = "App" >
 				<div className = "App-header" >
 					<img src = {logo} className = "App-logo"alt = "logo"/>
-					{this.state.readOnly?
-					<Button className="coolButton" onClick={this.hideReadOnly} size="lg">Hide Read Only View</Button>
-					:<Button className="coolButton" onClick={this.showReadOnly} size="lg">Show Read Only View</Button>
+					{readOnly?
+					<Button className="coolButton" onClick={hideReadOnly} size="lg">Hide Read Only View</Button>
+					:<Button className="coolButton" onClick={showReadOnly} size="lg">Show Read Only View</Button>
 					}
-					<Button className="coolButton" onClick={this.doPrint} size="lg">Print</Button>
+					<Button className="coolButton" onClick={doPrint} size="lg">Print</Button>
 				</div> 
-				{this.state.readOnly ?
-				<ReadOnlyList sections={this.state.sections} />
+				{readOnly ?
+				<ReadOnlyList sections={sections} />
 				:<div className = "List-Holder"> {
-					this.state.sections.map(item =>
+					sections.map(item =>
 						<Section sectionId={item.id} section={item.section} key={item.id} />
 					)}
 				</div>
 				}
 			</div>
 		)
-	}
 }
-
-export default App

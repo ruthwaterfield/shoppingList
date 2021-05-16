@@ -1,111 +1,78 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Modal, Row, Col, Form, Button }  from 'react-bootstrap'
 import axios from 'axios'
 
 import baseUrl from '../baseurl'
 
-class ProcessListModal extends Component{
-    constructor(props) {
-        super(props)
-        this.state = {
-            needToProcess: false
+export default function ProcessListModal(props) {
+    const [needToProcess, setNeedToProcess] = useState(false)
+    const [currentItemPosition, setCurrentItemPosition] = useState()
+    const [currentItem, setCurrentItem] = useState()
+    const [currentName, setCurrentName] = useState()
+    const [currentNotes, setCurrentNotes] = useState()
+
+    useEffect(() => {
+        if (props.show && props.processList.length > 0) {
+            const firstItem = props.processList[0]
+            setCurrentItemPosition(0)
+            setCurrentItem(firstItem)
+            setCurrentName(firstItem.name)
+            setCurrentNotes(firstItem.notes)
+            setNeedToProcess(true)
         }
-        
-        this.editItem = this.editItem.bind(this)
-        this.deleteItem = this.deleteItem.bind(this)
+    }, [props]
+    )
 
-        this.handleKeyPress = this.handleKeyPress.bind(this)
-
-        this.requireItem = this.requireItem.bind(this)
-        this.notRequireItem = this.notRequireItem.bind(this)
-        this.nextItem = this.nextItem.bind(this)
-
-        this.changeName = this.changeName.bind(this)
-        this.changeNotes = this.changeNotes.bind(this)
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.show &&
-            !prevProps.show &&
-            this.props.processList.length > 0){
-                const firstItem = this.props.processList[0]
-            this.setState({
-                currentItemPosition: 0,
-                currentItem: firstItem,
-                currentName: firstItem.name,
-                currentNotes: firstItem.notes,
-                needToProcess: true
-            })
-        }
-    }
-
-    handleKeyPress(event) {
+    const handleKeyPress = (event) => {
         if (event.key === 'Enter') { 
-        this.editItem(true)
+            editItem(true)
         }
     }
 
-    requireItem() {
-        this.editItem(true)
-    }
+    const requireItem = () => editItem(true)
+    const notRequireItem= () => editItem(false)
 
-    notRequireItem() {
-        this.editItem(false)
-    }
-
-    editItem(required) {
-        axios.post(baseUrl + '/listitem/edit/' + this.state.currentItem.id, {
-            name: this.state.currentName,
-            section: this.state.currentItem.section,
+    const editItem = (required) => {
+        axios.post(baseUrl + '/listitem/edit/' + currentItem.id, {
+            name: currentName,
+            section: currentItem.section,
             required: required,
-            regular: this.state.currentItem.regular,
-            temporary: this.state.currentItem.temporary,
-            notes: this.state.currentNotes
-        }).then(response => {
-            this.nextItem()
-        }).catch(error => {
-            console.log(error)
+            regular: currentItem.regular,
+            temporary: currentItem.temporary,
+            notes: currentNotes
         })
+        .then(response => nextItem())
+        .catch(error => console.log(error))
     }
 
-    deleteItem() {
-        axios.delete(baseUrl + '/listitem/' + this.state.currentItem.id).then(response => {
-            this.nextItem()
-        }).catch(error => {
-            console.log(error)
-        })
+    const deleteItem= () => {
+        axios.delete(baseUrl + '/listitem/' + currentItem.id)
+        .then(response => nextItem())
+        .catch(error => console.log(error))
     }
 
-    nextItem() {
-        const nextItemPosition = this.state.currentItemPosition + 1
-        if (nextItemPosition < this.props.processList.length) {
-            const nextItem = this.props.processList[nextItemPosition]
-            this.setState({
-                currentItemPosition: nextItemPosition,
-                currentItem: nextItem,
-                currentName: nextItem.name,
-                currentNotes: nextItem.notes
-            })
+    const nextItem= () => {
+        const nextItemPosition = currentItemPosition + 1
+        if (nextItemPosition < props.processList.length) {
+            const nextItem = props.processList[nextItemPosition]
+            setCurrentItemPosition(nextItemPosition)
+            setCurrentItem(nextItem)
+            setCurrentName(nextItem.name)
+            setCurrentNotes(nextItem.notes)
         } else {
-            this.setState({needToProcess: false})
+            setNeedToProcess(false)
         }
     }
 
-    changeName(event) {
-        this.setState({currentName: event.target.value})
-    }
+    const changeName = (event) => setCurrentName(event.target.value)
+    const changeNotes = (event) => setCurrentNotes(event.target.value)
 
-    changeNotes(event) {
-        this.setState({currentNotes: event.target.value})
-    }
-
-    render() {
-        return (
-        <Modal show={this.props.show} onHide={this.props.hideModal} centered="true" size="lg"  onKeyDown={this.handleKeyPress}>
-            {this.state.needToProcess ?
+    return (
+        <Modal show={props.show} onHide={props.hideModal} centered="true" size="lg"  onKeyDown={handleKeyPress}>
+            {needToProcess ?
             <Fragment>
                 <Modal.Header closeButton>
-                    <Modal.Title>Processing {this.props.section} - {this.state.currentName}</Modal.Title>
+                    <Modal.Title>Processing {props.section} - {currentName}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form className="processItemForm">
@@ -114,7 +81,7 @@ class ProcessListModal extends Component{
                             Name
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control type="text" placeholder="Item name" value={this.state.currentName} onChange={this.changeName}/>
+                            <Form.Control type="text" placeholder="Item name" value={currentName} onChange={changeName}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formName">
@@ -122,30 +89,27 @@ class ProcessListModal extends Component{
                             Notes
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control type="text" placeholder="Notes" value={this.state.currentNotes} onChange={this.changeNotes}/>
+                            <Form.Control type="text" placeholder="Notes" value={currentNotes} onChange={changeNotes}/>
                         </Col>
                     </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className="mr-auto" variant="warning" onClick={this.deleteItem}>Delete Item Forever</Button>
-                    <Button variant="danger" onClick={this.notRequireItem}>Not Today</Button>
-                    <Button variant="success" onClick={this.requireItem}>Yes Please!</Button>
+                    <Button className="mr-auto" variant="warning" onClick={deleteItem}>Delete Item Forever</Button>
+                    <Button variant="danger" onClick={notRequireItem}>Not Today</Button>
+                    <Button variant="success" onClick={requireItem}>Yes Please!</Button>
                 </Modal.Footer>
             </Fragment>
             :<Fragment>
                 <Modal.Header closeButton>
-                    <Modal.Title>Processing {this.props.section}</Modal.Title>
+                    <Modal.Title>Processing {props.section}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>Nothing to process- all done!</div> 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={this.props.hideModal}>Finished!</Button>
+                    <Button variant="primary" onClick={props.hideModal}>Finished!</Button>
                 </Modal.Footer>
             </Fragment>}
         </Modal>)
-    }
 }
-
-export default ProcessListModal
